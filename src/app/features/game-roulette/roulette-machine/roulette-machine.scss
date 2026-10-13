@@ -474,7 +474,7 @@
         zoom: 1;
         width: 100%;
         max-width: 100%;
-        padding: 0.45rem 2.6rem 0.45rem 0.35rem;
+        padding: 1.2rem 2.6rem 0.45rem 0.35rem;
     }
 
     .hood {
@@ -501,9 +501,51 @@
 }
 
 @include bp.below(bp.$phone-wide) {
+    .scroller {
+        overflow: visible;
+    }
+
+    .machine {
+        zoom: 0.72;
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        padding: 1.25rem 5.1rem 0.75rem 0.55rem;
+    }
+
+    .side-rail {
+        top: 6.4rem;
+        right: 3.5rem;
+        width: 1.25rem;
+        min-height: 7.5rem;
+        height: calc(100% - 12.2rem);
+    }
+
     .add,
     .lever {
-        min-width: 2.75rem;
-        min-height: 2.75rem;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .add .pi {
+        font-size: 0.68rem;
+    }
+
+    .lever {
+        width: 2rem;
+        height: 6.5rem;
+        left: calc(100% - 0.72rem);
+    }
+
+    .arm {
+        left: 0.3rem;
+        width: 0.48rem;
+        height: 5.4rem;
+    }
+
+    .knob {
+        top: -1rem;
+        width: 1.7rem;
+        height: 1.7rem;
     }
 }
