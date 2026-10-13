@@ -1,0 +1,100 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--space-window);
+  background: var(--color-primary);
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 20;
+  padding: 0.45rem 0.8rem;
+  background: var(--color-white);
+  color: var(--color-ink);
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.6rem;
+  text-decoration: none;
+}
+
+.skip-link:not(:focus):not(:focus-visible) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.window {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-primary);
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: var(--radius-window);
+  box-shadow: 0.4rem 0.45rem 0 var(--color-ink);
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.5rem 1.75rem 1.75rem 1.75rem;
+  background-image: url('/images/workspace-background.png');
+  background-position: center;
+  background-size: contain;
+  border-radius: 0 0 calc(var(--radius-window) - var(--border-width))
+    calc(var(--radius-window) - var(--border-width));
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.35rem 1rem 0.85rem 0.85rem;
+  scrollbar-color: var(--color-ink) var(--color-white);
+}
+
+.content:focus {
+  outline: none;
+}
+
+.content:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: -5px;
+}
+
+@media (max-width: 720px) {
+  :host {
+    padding: 0;
+  }
+
+  .window {
+    width: 100%;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .workspace {
+    border-radius: 0;
+  }
+}

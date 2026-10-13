@@ -1,0 +1,13 @@
+<nav class="tabs" aria-label="Navegação principal">
+  @for (screen of screens; track screen.path) {
+    <a
+      class="tab"
+      [routerLink]="screen.path ? '/' + screen.path : '/'"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+    >
+      {{ screen.label }}
+    </a>
+  }
+</nav>

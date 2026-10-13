@@ -1,0 +1,248 @@
+<h1 class="sr-only">{{ title }}</h1>
+
+<div class="stage">
+  <div class="scroller">
+    <div class="machine" [class.is-down]="leverDown()" [class.is-live]="drawing()">
+      <div class="hood" aria-hidden="true">
+        <span class="lamp"></span>
+        <span class="crest"></span>
+      </div>
+
+      <div class="cabinet">
+        <div class="columns">
+          @for (reel of reels(); track reel.id; let column = $index) {
+            <section class="column" [attr.aria-label]="'coluna ' + columnNumber(reel.id)">
+              <button
+                type="button"
+                class="criterion"
+                [disabled]="drawing()"
+                aria-haspopup="dialog"
+                [attr.aria-expanded]="editingId() === reel.id"
+                (click)="openCriterion(reel.id)"
+              >
+                {{ criterionLabel(reel) }}
+              </button>
+
+              <div class="pane" aria-live="polite" [attr.aria-busy]="reel.phase === 'spinning'">
+                @if (reel.phase === 'spinning') {
+                  @if (reducedMotion()) {
+                    <span class="mystery" aria-hidden="true">?</span>
+                  } @else {
+                    <div
+                      class="strip"
+                      aria-hidden="true"
+                      [style.animation-duration]="spinDuration(reel)"
+                      [style.animation-delay]="spinDelay(column)"
+                    >
+                      @for (group of [0, 1]; track group) {
+                        <div class="strip-copy">
+                          @for (cover of reel.spinCovers; track cover.key) {
+                            <span class="spin-card">
+                              @if (cover.imageUrl; as src) {
+                                <img [src]="src" alt="" />
+                              } @else {
+                                <span>?</span>
+                              }
+                            </span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                  <span class="sr-only">sorteando</span>
+                } @else if (reel.game; as game) {
+                  <article
+                    class="game"
+                    tabindex="0"
+                    [attr.aria-label]="
+                      game.name + ', nível ' + game.level + ', ' + game.playTimeMinutes + ' minutos'
+                    "
+                  >
+                    @if (coverOf(game); as src) {
+                      @if (!reel.broken) {
+                        <img class="cover" [src]="src" alt="" (error)="markBroken(reel.id)" />
+                      } @else {
+                        <span class="mark" aria-hidden="true">{{ initialOf(game.name) }}</span>
+                      }
+                    } @else {
+                      <span class="mark" aria-hidden="true">{{ initialOf(game.name) }}</span>
+                    }
+                    <span class="game-info">
+                      <span class="name">{{ game.name }}</span>
+                      <span class="meta">nível {{ game.level }}</span>
+                      <span class="meta">{{ game.playTimeMinutes }} min</span>
+                    </span>
+                  </article>
+                } @else if (reel.message) {
+                  <div class="miss" role="alert" tabindex="0">
+                    <i class="pi pi-times" aria-hidden="true"></i>
+                    <span class="miss-info">{{ reel.message }}</span>
+                  </div>
+                } @else {
+                  <span class="mystery" aria-hidden="true">?</span>
+                }
+              </div>
+
+              <div class="reel-actions">
+                <button
+                  type="button"
+                  class="reel-action redraw"
+                  [disabled]="drawing()"
+                  [attr.aria-label]="'sortear novamente a coluna ' + columnNumber(reel.id)"
+                  (click)="redraw(reel.id)"
+                >
+                  <i class="pi pi-refresh" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  class="reel-action remove"
+                  [disabled]="drawing() || reels().length <= 1"
+                  [attr.aria-label]="'remover coluna ' + columnNumber(reel.id)"
+                  (click)="removeColumn(reel.id)"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </section>
+          }
+        </div>
+      </div>
+
+      <div class="plinth" aria-hidden="true"></div>
+
+      <div class="side-rail">
+        <button
+          type="button"
+          class="add"
+          aria-label="adicionar coluna"
+          aria-haspopup="dialog"
+          [disabled]="drawing() || reels().length >= maxColumns"
+          (click)="openNewColumn()"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="lever"
+          aria-label="puxar a manivela"
+          [disabled]="drawing()"
+          (click)="pull()"
+        >
+          <span class="arm" aria-hidden="true"><span class="knob"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [header]="dialogHeader()"
+  [visible]="editingId() !== null"
+  (visibleChange)="onCriterionVisible($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  closeAriaLabel="fechar"
+  appendTo="body"
+  styleClass="account-dialog"
+  maskStyleClass="account-dialog-mask"
+>
+  <fieldset class="modes">
+    <legend class="sr-only">modo do critério</legend>
+    <label class="choice">
+      <input
+        type="radio"
+        name="criterion-mode"
+        value="level"
+        [checked]="draft().mode === 'level'"
+        (change)="setMode('level')"
+      />
+      por nível
+    </label>
+    <label class="choice">
+      <input
+        type="radio"
+        name="criterion-mode"
+        value="category"
+        [checked]="draft().mode === 'category'"
+        (change)="setMode('category')"
+      />
+      por categoria
+    </label>
+    <label class="choice">
+      <input
+        type="radio"
+        name="criterion-mode"
+        value="mechanic"
+        [checked]="draft().mode === 'mechanic'"
+        (change)="setMode('mechanic')"
+      />
+      por mecânica
+    </label>
+  </fieldset>
+
+  <div class="field">
+    @switch (draft().mode) {
+      @case ('level') {
+        <label for="criterion-value">nível</label>
+        <select id="criterion-value" (change)="setLevel($event)">
+          @for (level of levels; track level) {
+            <option [value]="level" [selected]="draft().level === level">{{ level }}</option>
+          }
+        </select>
+      }
+      @case ('category') {
+        @if (categoriesState() === 'loading') {
+          <p class="login-note">carregando categorias</p>
+        } @else if (categoriesState() === 'error') {
+          <p class="login-error" role="alert">não foi possível carregar as categorias.</p>
+        } @else if (categories().length === 0) {
+          <p class="login-note">nenhuma categoria cadastrada</p>
+        } @else {
+          <label for="criterion-value">categoria</label>
+          <select id="criterion-value" (change)="setCategory($event)">
+            <option value="" [selected]="draft().categoryId === null">escolha</option>
+            @for (item of categories(); track item.id) {
+              <option [value]="item.id" [selected]="draft().categoryId === item.id">
+                {{ item.name }}
+              </option>
+            }
+          </select>
+        }
+      }
+      @case ('mechanic') {
+        @if (mechanicsState() === 'loading') {
+          <p class="login-note">carregando mecânicas</p>
+        } @else if (mechanicsState() === 'error') {
+          <p class="login-error" role="alert">não foi possível carregar as mecânicas.</p>
+        } @else if (mechanics().length === 0) {
+          <p class="login-note">nenhuma mecânica cadastrada</p>
+        } @else {
+          <label for="criterion-value">mecânica</label>
+          <select id="criterion-value" (change)="setMechanic($event)">
+            <option value="" [selected]="draft().mechanicId === null">escolha</option>
+            @for (item of mechanics(); track item.id) {
+              <option [value]="item.id" [selected]="draft().mechanicId === item.id">
+                {{ item.name }}
+              </option>
+            }
+          </select>
+        }
+      }
+    }
+  </div>
+
+  <div class="dialog-actions">
+    <button type="button" class="quiet-action" (click)="cancelCriterion()">cancelar</button>
+    <button
+      type="button"
+      class="primary-action"
+      [disabled]="!draftReady()"
+      (click)="confirmCriterion()"
+    >
+      confirmar
+    </button>
+  </div>
+</p-dialog>

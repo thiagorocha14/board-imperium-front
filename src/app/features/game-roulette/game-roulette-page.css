@@ -1,0 +1,464 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 0.45rem 0.5rem 0.75rem;
+}
+
+.scroller {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-color: var(--color-ink) var(--color-white);
+}
+
+.machine {
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
+  padding: 1rem 5.6rem 0.8rem 0.75rem;
+  perspective: 75rem;
+  filter: drop-shadow(0.4rem 0.45rem 0 var(--color-ink));
+  zoom: 1.3;
+}
+
+.hood {
+  position: relative;
+  height: 5.5rem;
+  margin-inline: 1.6rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-bottom: 0;
+  border-radius: 7rem 7rem 0 0;
+  background: var(--color-primary);
+  transform: rotateX(-2deg);
+}
+
+.lamp {
+  position: absolute;
+  z-index: 1;
+  top: -0.7rem;
+  left: 50%;
+  width: 1.55rem;
+  height: 1.55rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-orange);
+  box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--color-orange) 55%, transparent);
+  transform: translateX(-50%);
+}
+
+.crest {
+  position: absolute;
+  bottom: 0.65rem;
+  left: 50%;
+  width: 1.35rem;
+  height: 1.35rem;
+  background: var(--color-white);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  transform: translateX(-50%);
+}
+
+.cabinet {
+  position: relative;
+  z-index: 1;
+  margin-top: -2px;
+  padding: 0.85rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.55rem 0.55rem 0.15rem 0.15rem;
+  background: var(--color-white);
+  transform: rotateX(1deg);
+}
+
+.columns {
+  display: flex;
+  gap: 0.65rem;
+  padding: 0.65rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.75rem;
+  background: var(--color-primary);
+}
+
+.column {
+  display: flex;
+  flex: 0 0 10.15rem;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 10.15rem;
+}
+
+.criterion,
+.add {
+  border: var(--border-width) solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.criterion {
+  border-radius: var(--radius-control);
+}
+
+.criterion {
+  min-height: 2.15rem;
+  padding: 0.25rem 0.65rem;
+  overflow: hidden;
+  font-size: 0.88rem;
+  line-height: 1.15;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.criterion:hover:not(:disabled),
+.reel-action:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.pane {
+  --card-size: 7.6rem;
+  --card-shadow: 0.3rem 0.35rem 0 var(--color-ink);
+
+  position: relative;
+  display: grid;
+  width: 10.15rem;
+  height: 10.15rem;
+  overflow: hidden;
+  place-items: center;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.8rem;
+  background: var(--color-white);
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: start;
+  animation: reel-roll 1.1s linear infinite;
+}
+
+.strip-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding-block: 0.6rem;
+}
+
+.spin-card,
+.mystery,
+.cover,
+.mark,
+.miss {
+  box-sizing: border-box;
+  width: var(--card-size);
+  height: var(--card-size);
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.65rem;
+  box-shadow: var(--card-shadow);
+}
+
+.spin-card,
+.mystery {
+  display: grid;
+  flex: 0 0 auto;
+  overflow: hidden;
+  place-items: center;
+  background: var(--color-white);
+  color: var(--color-primary);
+  font-family: var(--font-title);
+  font-size: 4rem;
+}
+
+.spin-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.criterion:disabled,
+.reel-action:disabled,
+.lever:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.game {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.cover {
+  display: block;
+  object-fit: cover;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+  font-family: var(--font-title);
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.game-info {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  background: rgb(1 58 0 / 82%);
+  color: var(--color-white);
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.game:hover .game-info,
+.game:focus-visible .game-info {
+  opacity: 1;
+}
+
+.name {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.miss {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  background: var(--color-white);
+  color: var(--color-red);
+}
+
+.miss .pi {
+  font-size: 3.4rem;
+  font-weight: 700;
+}
+
+.miss-info {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0.75rem;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  line-height: 1.2;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.miss:hover .miss-info,
+.miss:focus-visible .miss-info {
+  opacity: 1;
+}
+
+.reel-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.reel-action {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  place-items: center;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-ink);
+  cursor: pointer;
+  box-shadow: 0.12rem 0.16rem 0 var(--color-ink);
+}
+
+.reel-action .pi {
+  font-size: 0.82rem;
+}
+
+.remove:hover:not(:disabled) {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.redraw:hover:not(:disabled) {
+  background: var(--color-orange);
+}
+
+.plinth {
+  height: 1.5rem;
+  margin-inline: -0.65rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.28rem;
+  background: var(--color-primary);
+}
+
+.side-rail {
+  position: absolute;
+  z-index: 2;
+  top: 10rem;
+  right: 3.65rem;
+  width: 2rem;
+  height: calc(100% - 25rem);
+  min-height: 12rem;
+}
+
+.add {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  place-items: center;
+  border-left: 0;
+  border-radius: 0 1rem 1rem 0;
+  background: var(--color-primary-light);
+  color: var(--color-white);
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.add:hover:not(:disabled),
+.add:focus-visible {
+  background: var(--color-orange);
+  color: var(--color-ink);
+}
+
+.add:disabled {
+  background: color-mix(in srgb, var(--color-primary-light) 35%, #8c8c8c);
+  color: color-mix(in srgb, var(--color-white) 70%, #8c8c8c);
+  cursor: not-allowed;
+}
+
+.add .pi {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.lever {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: calc(100% - 0.9rem);
+  width: 2.2rem;
+  height: 7.4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-100%);
+}
+
+.arm {
+  position: absolute;
+  bottom: 0;
+  left: 0.36rem;
+  width: 0.55rem;
+  height: 6.2rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-ink) 22%, var(--color-white));
+  transform: rotate(20deg);
+  transform-origin: bottom center;
+  transition: transform 500ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.machine.is-down .arm {
+  transform: rotate(70deg);
+  transition-duration: 400ms;
+  transition-timing-function: ease-in;
+}
+
+.knob {
+  position: absolute;
+  top: -1.15rem;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-red);
+  transform: translateX(-50%);
+}
+
+.machine.is-live .lamp {
+  animation: lamp-blink 0.7s ease-in-out infinite;
+}
+
+@keyframes reel-roll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes lamp-blink {
+  50% {
+    filter: brightness(1.35);
+  }
+}
+
+@media (max-height: 920px) {
+  .machine {
+    zoom: 1.15;
+  }
+}
+
+@media (max-height: 780px) {
+  .machine {
+    zoom: 1;
+  }
+}
+
+@media (max-height: 700px) {
+  .machine {
+    zoom: 0.88;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arm,
+  .strip,
+  .game-info,
+  .miss-info,
+  .machine.is-live .lamp {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,210 @@
+.account-dialog-mask.p-overlay-mask {
+  background: rgba(20, 17, 15, 0.45);
+}
+
+.account-dialog.p-dialog {
+  width: min(28rem, calc(100vw - 2rem));
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-main);
+  box-shadow: none;
+}
+
+.account-dialog .p-dialog-header {
+  padding: 1rem 1.1rem 0.2rem;
+  background: transparent;
+  color: var(--color-ink);
+}
+
+.account-dialog .p-dialog-title {
+  color: var(--color-ink);
+  font-family: var(--font-title);
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.account-dialog .p-dialog-close-button {
+  color: var(--color-ink);
+}
+
+.account-dialog .p-dialog-content {
+  display: grid;
+  gap: 0.9rem;
+  padding: 0.4rem 1.1rem 1.15rem;
+  background: transparent;
+  color: var(--color-ink);
+}
+
+.account-dialog .login-form,
+.account-dialog .field,
+.account-dialog .dialog-actions {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.account-dialog .login-form {
+  gap: 0.75rem;
+}
+
+.account-dialog .field label,
+.account-dialog .choice {
+  font-size: 0.95rem;
+}
+
+.account-dialog .modes {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.account-dialog .choice {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.account-dialog select {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.7rem;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.account-dialog .p-inputtext {
+  width: 100%;
+  font-family: var(--font-main);
+}
+
+.account-dialog .login-note,
+.account-dialog .logout-copy,
+.account-dialog .login-error {
+  margin: 0;
+}
+
+.account-dialog .login-note {
+  color: #66635d;
+  font-size: 0.85rem;
+}
+
+.account-dialog .login-error {
+  padding: 0.7rem 0.85rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.65rem;
+  background: #fff1ee;
+}
+
+.account-dialog .field-error {
+  margin: 0;
+  color: var(--color-red);
+  font-size: 0.85rem;
+}
+
+.account-dialog .mode-switch {
+  justify-self: end;
+  width: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.account-dialog .mode-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.account-dialog .dialog-actions {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 0.35rem;
+}
+
+.account-dialog .primary-action,
+.account-dialog .quiet-action,
+.account-dialog .google-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.7rem;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.account-dialog .primary-action,
+.account-dialog .google-action {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.account-dialog .primary-action:disabled,
+.account-dialog .quiet-action:disabled,
+.account-dialog .google-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.game-dialog.account-dialog.p-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(42rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+}
+
+.game-dialog.account-dialog .p-dialog-content {
+  overflow: auto;
+}
+
+.game-dialog .register-game {
+  max-width: none;
+  margin: 0;
+  padding: 0.35rem 0.2rem 0.75rem;
+}
+
+.p-toast .p-toast-message.retro-toast {
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: 0.65rem;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-main);
+  box-shadow: 0.3rem 0.35rem 0 var(--color-ink);
+  backdrop-filter: none;
+  opacity: 1;
+  transform: none;
+}
+
+.p-toast .retro-toast .p-toast-message-content {
+  align-items: center;
+  padding: 0.75rem 0.95rem;
+  background: transparent;
+}
+
+.p-toast .retro-toast .p-toast-summary,
+.p-toast .retro-toast .p-toast-message-icon,
+.p-toast .retro-toast .p-toast-close-button {
+  display: none;
+}
+
+.p-toast .retro-toast .p-toast-detail {
+  color: var(--color-ink);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
