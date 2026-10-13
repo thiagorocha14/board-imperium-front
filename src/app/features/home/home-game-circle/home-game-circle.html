@@ -1,0 +1,36 @@
+@if (kind() === 'add') {
+    <button
+        type="button"
+        class="circle circle-add"
+        aria-label="adicionar novo jogo"
+        title="adicionar novo jogo"
+        (click)="addGame.emit()"
+    >
+        <span aria-hidden="true">+</span>
+    </button>
+} @else if (item(); as item) {
+    <button
+        type="button"
+        class="circle"
+        [class.is-reverse]="reverseSpin()"
+        [attr.aria-label]="item.name"
+        [class.is-center]="item.x === '0.0000' && item.y === '0.0000'"
+        [style.--x]="item.x"
+        [style.--y]="item.y"
+        [style.--pile-x]="item.pileX"
+        [style.--pile-y]="item.pileY"
+        [style.--spin]="item.spin"
+        [style.--delay]="item.delay"
+        (click)="open()"
+    >
+        @if (item.imageUrl !== null && !broken()) {
+            <img [src]="item.imageUrl" alt="" (error)="failCover()" />
+        } @else {
+            <span class="initial" aria-hidden="true">{{ item.initial }}</span>
+        }
+        <span class="veil">
+            <span class="name">{{ item.name }}</span>
+            <span class="date">{{ item.purchased }}</span>
+        </span>
+    </button>
+}

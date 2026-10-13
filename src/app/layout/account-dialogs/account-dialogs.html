@@ -1,128 +1,139 @@
 <p-dialog
-  [header]="mode() === 'login' ? 'entrar' : 'criar conta'"
-  [visible]="loginOpen()"
-  (visibleChange)="onLoginVisible($event)"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [closable]="true"
-  closeAriaLabel="fechar"
-  appendTo="body"
-  styleClass="account-dialog"
-  maskStyleClass="account-dialog-mask"
+    [header]="dialogHeader()"
+    [visible]="loginOpen()"
+    (visibleChange)="onLoginVisible($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    closeAriaLabel="fechar"
+    appendTo="body"
+    styleClass="account-dialog"
+    maskStyleClass="account-dialog-mask"
 >
-  @if (formError(); as message) {
-    <p class="login-error" role="alert">{{ message }}</p>
-  } @else if (notice(); as message) {
-    <p class="login-error" role="alert">{{ message }}</p>
-  }
-
-  <form class="login-form" [formGroup]="form" (ngSubmit)="onPasswordLogin()" novalidate>
-    <div class="field">
-      <label for="login-email">e-mail</label>
-      <input
-        id="login-email"
-        type="email"
-        pInputText
-        formControlName="email"
-        [attr.autocomplete]="mode() === 'login' ? 'username' : 'email'"
-        [attr.aria-invalid]="fieldErrors().email ? 'true' : null"
-        [attr.aria-describedby]="fieldErrors().email ? 'login-email-error' : null"
-      />
-      @if (fieldErrors().email; as message) {
-        <p class="field-error" id="login-email-error">{{ message }}</p>
-      }
-    </div>
-
-    @if (mode() === 'register') {
-      <div class="field">
-        <label for="login-name">nome</label>
-        <input
-          id="login-name"
-          type="text"
-          pInputText
-          formControlName="displayName"
-          autocomplete="name"
-          [attr.aria-invalid]="fieldErrors().displayName ? 'true' : null"
-          [attr.aria-describedby]="fieldErrors().displayName ? 'login-name-error' : null"
-        />
-        @if (fieldErrors().displayName; as message) {
-          <p class="field-error" id="login-name-error">{{ message }}</p>
-        }
-      </div>
+    @if (formError(); as message) {
+        <p class="login-error" role="alert">{{ message }}</p>
+    } @else if (notice(); as message) {
+        <p class="login-error" role="alert">{{ message }}</p>
     }
 
-    <div class="field">
-      <label for="login-password">senha</label>
-      <input
-        id="login-password"
-        type="password"
-        pInputText
-        formControlName="password"
-        [attr.autocomplete]="mode() === 'login' ? 'current-password' : 'new-password'"
-        [attr.aria-invalid]="fieldErrors().password ? 'true' : null"
-        [attr.aria-describedby]="fieldErrors().password ? 'login-password-error' : null"
-      />
-      @if (fieldErrors().password; as message) {
-        <p class="field-error" id="login-password-error">{{ message }}</p>
-      }
-    </div>
+    <form class="login-form" [formGroup]="form" (ngSubmit)="onPasswordLogin()" novalidate>
+        <div class="field">
+            <label for="login-email">e-mail</label>
+            <input
+                id="login-email"
+                type="email"
+                pInputText
+                formControlName="email"
+                [attr.autocomplete]="emailAutocomplete()"
+                [attr.aria-invalid]="ariaInvalid(fieldErrors().email)"
+                [attr.aria-describedby]="ariaDescribedBy('login-email-error', fieldErrors().email)"
+            />
+            @if (fieldErrors().email; as message) {
+                <p class="field-error" id="login-email-error">{{ message }}</p>
+            }
+        </div>
 
-    @if (mode() === 'register') {
-      <div class="field">
-        <label for="login-confirm">confirmar senha</label>
-        <input
-          id="login-confirm"
-          type="password"
-          pInputText
-          formControlName="confirmPassword"
-          autocomplete="new-password"
-          [attr.aria-invalid]="fieldErrors().confirmPassword ? 'true' : null"
-          [attr.aria-describedby]="fieldErrors().confirmPassword ? 'login-confirm-error' : null"
-        />
-        @if (fieldErrors().confirmPassword; as message) {
-          <p class="field-error" id="login-confirm-error">{{ message }}</p>
+        @if (mode() === 'register') {
+            <div class="field">
+                <label for="login-name">nome</label>
+                <input
+                    id="login-name"
+                    type="text"
+                    pInputText
+                    formControlName="displayName"
+                    autocomplete="name"
+                    [attr.aria-invalid]="ariaInvalid(fieldErrors().displayName)"
+                    [attr.aria-describedby]="
+                        ariaDescribedBy('login-name-error', fieldErrors().displayName)
+                    "
+                />
+                @if (fieldErrors().displayName; as message) {
+                    <p class="field-error" id="login-name-error">{{ message }}</p>
+                }
+            </div>
         }
-      </div>
+
+        <div class="field">
+            <label for="login-password">senha</label>
+            <input
+                id="login-password"
+                type="password"
+                pInputText
+                formControlName="password"
+                [attr.autocomplete]="passwordAutocomplete()"
+                [attr.aria-invalid]="ariaInvalid(fieldErrors().password)"
+                [attr.aria-describedby]="
+                    ariaDescribedBy('login-password-error', fieldErrors().password)
+                "
+            />
+            @if (fieldErrors().password; as message) {
+                <p class="field-error" id="login-password-error">{{ message }}</p>
+            }
+        </div>
+
+        @if (mode() === 'register') {
+            <div class="field">
+                <label for="login-confirm">confirmar senha</label>
+                <input
+                    id="login-confirm"
+                    type="password"
+                    pInputText
+                    formControlName="confirmPassword"
+                    autocomplete="new-password"
+                    [attr.aria-invalid]="ariaInvalid(fieldErrors().confirmPassword)"
+                    [attr.aria-describedby]="
+                        ariaDescribedBy('login-confirm-error', fieldErrors().confirmPassword)
+                    "
+                />
+                @if (fieldErrors().confirmPassword; as message) {
+                    <p class="field-error" id="login-confirm-error">{{ message }}</p>
+                }
+            </div>
+        }
+
+        <button class="quiet-action" type="submit" [disabled]="submitting()">
+            {{ submitLabel() }}
+        </button>
+    </form>
+
+    @if (mode() === 'login') {
+        <button class="google-action" type="button" (click)="loginWithGoogle()">
+            <i class="pi pi-google" aria-hidden="true"></i>
+            entrar com o google
+        </button>
     }
 
-    <button class="quiet-action" type="submit" [disabled]="submitting()">
-      {{ mode() === 'login' ? 'entrar com e-mail' : 'criar conta' }}
+    <button type="button" class="mode-switch" [disabled]="submitting()" (click)="switchMode()">
+        {{ switchLabel() }}
     </button>
-  </form>
-
-  @if (mode() === 'login') {
-    <button class="google-action" type="button" (click)="loginWithGoogle()">
-      <i class="pi pi-google" aria-hidden="true"></i>
-      entrar com o google
-    </button>
-  }
-
-  <button type="button" class="mode-switch" [disabled]="submitting()" (click)="switchMode()">
-    {{ mode() === 'login' ? 'criar conta' : 'já tenho conta' }}
-  </button>
 </p-dialog>
 
 <p-dialog
-  header="sair"
-  [visible]="logoutOpen()"
-  (visibleChange)="onLogoutVisible($event)"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [closable]="true"
-  closeAriaLabel="fechar"
-  appendTo="body"
-  styleClass="account-dialog"
-  maskStyleClass="account-dialog-mask"
+    header="sair"
+    [visible]="logoutOpen()"
+    (visibleChange)="onLogoutVisible($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    closeAriaLabel="fechar"
+    appendTo="body"
+    styleClass="account-dialog"
+    maskStyleClass="account-dialog-mask"
 >
-  <p class="logout-copy" id="logout-question">Deseja realmente sair?</p>
-  <div class="dialog-actions">
-    <button type="button" class="quiet-action" (click)="onLogoutVisible(false)">
-      continuar por aqui
-    </button>
-    <button type="button" class="primary-action" [disabled]="leaving()" (click)="confirmLogout()">
-      sair
-    </button>
-  </div>
+    <p class="logout-copy" id="logout-question">Deseja realmente sair?</p>
+    <div class="dialog-actions">
+        <button type="button" class="quiet-action" (click)="onLogoutVisible(false)">
+            continuar por aqui
+        </button>
+        <button
+            type="button"
+            class="primary-action"
+            [disabled]="leaving()"
+            (click)="confirmLogout()"
+        >
+            sair
+        </button>
+    </div>
 </p-dialog>

@@ -1,0 +1,48 @@
+<div class="field" [formGroup]="form()">
+    <span id="players-label">jogadores</span>
+    <div
+        class="players"
+        role="group"
+        aria-labelledby="players-label"
+        [class.is-invalid]="invalid('minPlayers') || invalid('maxPlayers')"
+    >
+        <div class="players-half">
+            <label for="min-players">mínimo</label>
+            <p-inputnumber
+                inputId="min-players"
+                formControlName="minPlayers"
+                mode="decimal"
+                locale="pt-BR"
+                [min]="1"
+                [step]="1"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="0"
+                [useGrouping]="false"
+                [allowEmpty]="true"
+                [ariaRequired]="true"
+            />
+        </div>
+        <div class="players-half">
+            <label for="max-players">máximo</label>
+            <p-inputnumber
+                inputId="max-players"
+                formControlName="maxPlayers"
+                mode="decimal"
+                locale="pt-BR"
+                [min]="1"
+                [step]="1"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="0"
+                [useGrouping]="false"
+                [allowEmpty]="true"
+                [ariaRequired]="true"
+            />
+        </div>
+    </div>
+    @if (invalid('minPlayers')) {
+        <p class="field-error">{{ minMessage() }}</p>
+    }
+    @if (invalid('maxPlayers')) {
+        <p class="field-error">{{ maxMessage() }}</p>
+    }
+</div>

@@ -1,0 +1,28 @@
+<div class="field">
+    <label id="level-label" for="level">nosso nível</label>
+    <div class="level-row">
+        <input
+            id="level"
+            class="level-slider"
+            [class.is-unset]="control().value === null"
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+            [value]="sliderValue()"
+            [style.--level-fill]="levelFill()"
+            [attr.aria-valuetext]="ariaValueText()"
+            [attr.aria-valuenow]="control().value"
+            aria-required="true"
+            (input)="commitLevel($event)"
+            (change)="commitLevel($event)"
+            (pointerup)="commitLevel($event)"
+            (keyup)="commitLevelFromKey($event)"
+            (keydown)="onLevelKeydown($event)"
+        />
+        <output class="level-value" for="level">{{ levelText() }}</output>
+    </div>
+    @if (invalid()) {
+        <p class="field-error">Escolha o nosso nível, de 1 a 5.</p>
+    }
+</div>

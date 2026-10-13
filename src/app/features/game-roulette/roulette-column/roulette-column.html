@@ -1,0 +1,98 @@
+<section class="column" [attr.aria-label]="'coluna ' + columnNumber()">
+    <button
+        type="button"
+        class="criterion"
+        [disabled]="drawing()"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="expanded()"
+        (click)="openCriterion.emit(reel().id)"
+    >
+        {{ label() }}
+    </button>
+
+    <div class="pane" aria-live="polite" [attr.aria-busy]="reel().phase === 'spinning'">
+        @if (reel().phase === 'spinning') {
+            @if (reducedMotion()) {
+                <span class="mystery" aria-hidden="true">?</span>
+            } @else {
+                <div
+                    class="strip"
+                    aria-hidden="true"
+                    [style.animation-duration]="duration()"
+                    [style.animation-delay]="delay()"
+                >
+                    @for (group of [0, 1]; track group) {
+                        <div class="strip-copy">
+                            @for (cover of reel().spinCovers; track cover.key) {
+                                <span class="spin-card">
+                                    @if (cover.imageUrl; as src) {
+                                        <img [src]="src" alt="" />
+                                    } @else {
+                                        <span>?</span>
+                                    }
+                                </span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            <span class="sr-only">sorteando</span>
+        } @else if (reel().game; as game) {
+            <article
+                class="game"
+                tabindex="0"
+                [attr.aria-label]="
+                    game.name + ', nível ' + game.level + ', ' + game.playTimeMinutes + ' minutos'
+                "
+            >
+                @if (coverOf(game); as src) {
+                    @if (!reel().broken) {
+                        <img
+                            class="cover"
+                            [src]="src"
+                            alt=""
+                            (error)="coverFailed.emit(reel().id)"
+                        />
+                    } @else {
+                        <span class="mark" aria-hidden="true">{{ initialOf(game.name) }}</span>
+                    }
+                } @else {
+                    <span class="mark" aria-hidden="true">{{ initialOf(game.name) }}</span>
+                }
+                <span class="game-info">
+                    <span class="name">{{ game.name }}</span>
+                    <span class="meta">nível {{ game.level }}</span>
+                    <span class="meta">{{ game.playTimeMinutes }} min</span>
+                </span>
+            </article>
+        } @else if (reel().message) {
+            <div class="miss" role="alert" tabindex="0">
+                <i class="pi pi-times" aria-hidden="true"></i>
+                <span class="miss-info">{{ reel().message }}</span>
+            </div>
+        } @else {
+            <span class="mystery" aria-hidden="true">?</span>
+        }
+    </div>
+
+    <div class="reel-actions">
+        <button
+            type="button"
+            class="reel-action redraw"
+            [disabled]="drawing()"
+            [attr.aria-label]="'sortear novamente a coluna ' + columnNumber()"
+            (click)="redraw.emit(reel().id)"
+        >
+            <i class="pi pi-refresh" aria-hidden="true"></i>
+        </button>
+        <button
+            type="button"
+            class="reel-action remove"
+            [disabled]="drawing() || !canRemove()"
+            [attr.aria-label]="'remover coluna ' + columnNumber()"
+            (click)="remove.emit(reel().id)"
+        >
+            <i class="pi pi-trash" aria-hidden="true"></i>
+        </button>
+    </div>
+</section>

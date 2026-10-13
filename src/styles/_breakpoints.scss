@@ -1,0 +1,9 @@
+$phone: 480px;
+$phone-wide: 720px;
+$tablet: 1024px;
+
+@mixin below($width) {
+    @media (max-width: $width) {
+        @content;
+    }
+}

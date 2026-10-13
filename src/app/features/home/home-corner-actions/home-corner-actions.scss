@@ -1,0 +1,92 @@
+@use '../../../../styles/breakpoints' as bp;
+@use '../../../../styles/mixins' as mix;
+
+:host {
+    display: contents;
+}
+
+.corner-actions {
+    position: absolute;
+    z-index: 6;
+    right: var(--page-pad-inline);
+    bottom: var(--page-pad-block);
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 0.9rem;
+}
+
+.fab {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: var(--circle-min);
+    height: var(--circle-min);
+    padding: 0;
+    @include mix.ink-border;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0.3rem 0.35rem 0 var(--color-ink);
+    cursor: pointer;
+    transition: transform 160ms ease;
+    appearance: none;
+
+    .pi {
+        font-size: calc(var(--circle-min) * 0.38);
+        line-height: 1;
+    }
+
+    &:hover,
+    &:focus-visible {
+        transform: scale(1.08);
+    }
+}
+
+.fab-small {
+    width: calc(var(--circle-min) * 0.6);
+    height: calc(var(--circle-min) * 0.6);
+    box-shadow: 0.15rem 0.175rem 0 var(--color-ink);
+
+    .pi {
+        font-size: calc(var(--circle-min) * 0.25) !important;
+    }
+}
+
+.fab-add {
+    font-family: var(--font-title);
+    font-size: calc(var(--circle-min) * 0.62);
+    line-height: 0.8;
+}
+
+.fab-reorder.is-spinning .pi {
+    animation: reorder-spin 920ms ease-in-out;
+}
+
+@keyframes reorder-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@include bp.below(bp.$phone-wide) {
+    .fab-small {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+}
+
+@include mix.reduced-motion {
+    .fab {
+        transition: none;
+
+        &:hover,
+        &:focus-visible {
+            transform: none;
+        }
+    }
+
+    .fab-reorder.is-spinning .pi {
+        animation: none;
+    }
+}

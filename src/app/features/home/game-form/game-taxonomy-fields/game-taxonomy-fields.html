@@ -1,0 +1,39 @@
+<div class="field-row" [formGroup]="form()">
+    <div class="field">
+        <label for="categories">categorias (opcional)</label>
+        <p-multiselect
+            inputId="categories"
+            formControlName="categoryIds"
+            [options]="categories()"
+            optionLabel="name"
+            optionValue="id"
+            display="chip"
+            [filter]="true"
+            filterBy="name"
+            placeholder="escolha"
+            emptyMessage="nenhuma categoria"
+            emptyFilterMessage="nada encontrado"
+            appendTo="body"
+            panelStyleClass="retro-overlay"
+        />
+    </div>
+
+    <div class="field">
+        <label for="mechanics">mecânicas (opcional)</label>
+        <p-multiselect
+            inputId="mechanics"
+            formControlName="mechanicIds"
+            [options]="mechanics()"
+            optionLabel="name"
+            optionValue="id"
+            display="chip"
+            [filter]="true"
+            filterBy="name"
+            placeholder="escolha"
+            emptyMessage="nenhuma mecânica"
+            emptyFilterMessage="nada encontrado"
+            appendTo="body"
+            panelStyleClass="retro-overlay"
+        />
+    </div>
+</div>

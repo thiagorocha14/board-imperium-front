@@ -1,0 +1,126 @@
+@use '../../../../styles/breakpoints' as bp;
+@use '../../../../styles/mixins' as mix;
+
+:host {
+    display: contents;
+}
+
+.toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    position: absolute;
+    top: var(--page-pad-block);
+    right: var(--page-pad-inline);
+    left: var(--page-pad-inline);
+    z-index: 4;
+}
+
+.levels {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.levels-label {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.pill {
+    display: flex;
+    overflow: hidden;
+    @include mix.ink-border;
+    border-radius: var(--radius-control);
+    background: var(--color-white);
+    box-shadow: 0.3rem 0.35rem 0 var(--color-ink);
+}
+
+.pill-part {
+    min-width: 2.4rem;
+    padding: 0.3rem 0.7rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink);
+    font: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+        background-color 140ms ease,
+        color 140ms ease;
+
+    & + & {
+        border-left: var(--border-width) solid var(--color-ink);
+    }
+
+    &:hover {
+        background: var(--color-primary-lighter);
+        color: var(--color-white);
+    }
+
+    &.is-selected {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: inset 0 0 0 3px var(--color-ink);
+    }
+}
+
+.reload {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    @include mix.ink-border;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: transform 140ms ease;
+
+    .pi {
+        font-size: 1.05rem;
+        line-height: 1;
+    }
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+        transform: rotate(-30deg) scale(1.1);
+    }
+
+    &:disabled {
+        cursor: wait;
+        opacity: 0.6;
+    }
+}
+
+@include bp.below(bp.$phone-wide) {
+    .pill-part {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        padding-inline: 0.5rem;
+    }
+
+    .reload {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+}
+
+@include mix.reduced-motion {
+    .pill-part,
+    .reload {
+        transition: none;
+    }
+
+    .reload:hover:not(:disabled),
+    .reload:focus-visible:not(:disabled) {
+        transform: none;
+    }
+}

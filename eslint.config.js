@@ -15,6 +15,14 @@ module.exports = defineConfig([
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      curly: ['error', 'all'],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ConditionalExpression',
+          message: 'Use if/else com bloco. O operador ternário não é permitido.',
+        },
+      ],
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -36,6 +44,14 @@ module.exports = defineConfig([
   {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
-    rules: {},
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Conditional',
+          message: 'Use @if/@else em bloco. O operador ternário não é permitido no template.',
+        },
+      ],
+    },
   },
 ]);

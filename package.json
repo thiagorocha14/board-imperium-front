@@ -3,16 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "env": "node scripts/generate-env.mjs",
-    "prestart": "npm run env",
     "start": "ng serve",
-    "prebuild": "npm run env",
     "build": "ng build",
-    "prewatch": "npm run env",
     "watch": "ng build --watch --configuration development",
-    "pretest": "npm run env",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint && prettier --check \"src/**/*.{ts,html,scss}\""
   },
   "private": true,
   "packageManager": "npm@11.19.0",
@@ -35,6 +30,7 @@
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.0",
     "@eslint/js": "^10.0.1",
+    "@ngx-env/builder": "^22.0.0",
     "angular-eslint": "22.5.0",
     "eslint": "^10.9.1",
     "jsdom": "^30.0.0",

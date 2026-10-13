@@ -1,0 +1,27 @@
+<div class="toolbar">
+    <div class="levels">
+        <span id="levels-label" class="levels-label">nosso nível</span>
+        <div class="pill" role="group" aria-labelledby="levels-label">
+            @for (level of levels(); track level) {
+                <button
+                    type="button"
+                    class="pill-part"
+                    [class.is-selected]="levelSelected(level)"
+                    [attr.aria-pressed]="levelSelected(level)"
+                    (click)="levelToggled.emit(level)"
+                >
+                    {{ level }}
+                </button>
+            }
+        </div>
+    </div>
+    <button
+        type="button"
+        class="reload"
+        aria-label="recarregar jogos"
+        [disabled]="reloadDisabled()"
+        (click)="reloadCollection.emit()"
+    >
+        <i class="pi pi-refresh" aria-hidden="true"></i>
+    </button>
+</div>

@@ -1,27 +1,27 @@
 @if (status() !== 'loading') {
-  @if (user(); as current) {
-    <p class="identity">
-      @if (avatarUrl(current); as url) {
-        <img class="avatar" [src]="url" alt="" (error)="onAvatarError(url)" />
-      } @else {
-        <span class="avatar avatar-fallback" aria-hidden="true"></span>
-      }
-      <span class="identity-name">{{ current.displayName || current.email }}</span>
-    </p>
-  }
-
-  <div class="actions" role="group" aria-label="Ações da conta">
-    @for (action of actions(); track action.id) {
-      <button
-        type="button"
-        class="action"
-        [attr.data-tone]="action.tone"
-        [disabled]="action.disabled"
-        [attr.aria-label]="action.label"
-        (click)="onAction(action)"
-      >
-        <i [class]="action.icon" aria-hidden="true"></i>
-      </button>
+    @if (user(); as current) {
+        <p class="identity">
+            @if (avatarUrl(current); as url) {
+                <img class="avatar" [src]="url" alt="" (error)="onAvatarError(url)" />
+            } @else {
+                <span class="avatar avatar-fallback" aria-hidden="true"></span>
+            }
+            <span class="identity-name">{{ current.displayName || current.email }}</span>
+        </p>
     }
-  </div>
+
+    <div class="actions" role="group" aria-label="Ações da conta">
+        @for (action of actions(); track action.id) {
+            <button
+                type="button"
+                class="action"
+                [attr.data-tone]="action.tone"
+                [disabled]="action.disabled"
+                [attr.aria-label]="action.label"
+                (click)="onAction(action)"
+            >
+                <i [class]="action.icon" aria-hidden="true"></i>
+            </button>
+        }
+    </div>
 }

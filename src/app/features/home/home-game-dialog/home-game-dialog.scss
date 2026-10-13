@@ -1,0 +1,26 @@
+@use '../../../../styles/mixins' as mix;
+
+.status {
+    margin-inline: 0;
+    color: var(--color-ink);
+    font-family: var(--font-main);
+    text-align: center;
+}
+
+.notice {
+    width: min(100%, 36rem);
+    @include mix.ink-border;
+    border-radius: 0.65rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-main);
+
+    p {
+        margin: 0;
+    }
+
+    &.is-error {
+        background: #fff1ee;
+    }
+}

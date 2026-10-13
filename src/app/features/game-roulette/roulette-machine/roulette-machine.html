@@ -1,0 +1,57 @@
+<div class="stage">
+    <div class="scroller">
+        <div class="machine" [class.is-down]="leverDown()" [class.is-live]="drawing()">
+            <div class="hood" aria-hidden="true">
+                <span class="lamp"></span>
+                <span class="crest"></span>
+            </div>
+
+            <div class="cabinet">
+                <div class="columns">
+                    @for (column of columns(); track column.reel.id) {
+                        <app-roulette-column
+                            [reel]="column.reel"
+                            [label]="column.label"
+                            [columnNumber]="column.number"
+                            [duration]="column.duration"
+                            [delay]="column.delay"
+                            [expanded]="column.expanded"
+                            [drawing]="drawing()"
+                            [reducedMotion]="reducedMotion()"
+                            [canRemove]="canRemove()"
+                            (openCriterion)="openCriterion.emit($event)"
+                            (redraw)="redrawColumn.emit($event)"
+                            (remove)="removeColumn.emit($event)"
+                            (coverFailed)="markBroken.emit($event)"
+                        />
+                    }
+                </div>
+            </div>
+
+            <div class="plinth" aria-hidden="true"></div>
+
+            <div class="side-rail">
+                <button
+                    type="button"
+                    class="add"
+                    aria-label="adicionar coluna"
+                    aria-haspopup="dialog"
+                    [disabled]="drawing() || !canAdd()"
+                    (click)="addColumn.emit()"
+                >
+                    <i class="pi pi-plus" aria-hidden="true"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="lever"
+                    aria-label="puxar a manivela"
+                    [disabled]="drawing()"
+                    (click)="pullLever.emit()"
+                >
+                    <span class="arm" aria-hidden="true"><span class="knob"></span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

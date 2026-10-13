@@ -1,0 +1,30 @@
+<p-dialog
+    [header]="header()"
+    [visible]="true"
+    (visibleChange)="visibleChange.emit($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    closeAriaLabel="fechar"
+    appendTo="body"
+    styleClass="account-dialog game-dialog"
+    maskStyleClass="account-dialog-mask"
+>
+    @if (isCreate()) {
+        <app-game-form [saving]="saving()" (saveGame)="saveGame.emit($event)" />
+    } @else if (isLoading()) {
+        <p class="status" role="status">carregando jogo</p>
+    } @else if (errorMessage(); as message) {
+        <div class="notice is-error" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    } @else if (readyGame(); as game) {
+        <app-game-form
+            mode="edit"
+            [saving]="saving()"
+            [sourceGame]="game"
+            (saveGame)="saveGame.emit($event)"
+        />
+    }
+</p-dialog>

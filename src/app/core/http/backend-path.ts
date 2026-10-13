@@ -1,5 +1,8 @@
 export function backendPath(backendUrl: string, path: string): string {
-  const base = backendUrl.replace(/\/+$/, '');
-  const suffix = path.startsWith('/') ? path : `/${path}`;
-  return `${base}${suffix}`;
+    const base = backendUrl.replace(/\/+$/, '');
+    let suffix = path;
+    if (!path.startsWith('/')) {
+        suffix = `/${path}`;
+    }
+    return `${base}${suffix}`;
 }

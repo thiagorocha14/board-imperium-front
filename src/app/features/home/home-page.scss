@@ -1,0 +1,93 @@
+@use '../../../styles/breakpoints' as bp;
+@use '../../../styles/mixins' as mix;
+
+:host {
+    --page-pad-block: 1.35rem;
+    --page-pad-inline: 1.15rem;
+    --toolbar-space: 4.25rem;
+    --circle-max: 9.5rem;
+    --circle-min: 4.5rem;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    container-type: size;
+}
+
+.stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+    padding: calc(var(--page-pad-block) + var(--toolbar-space)) var(--page-pad-inline);
+    scrollbar-color: var(--color-ink) var(--color-white);
+}
+
+.cluster,
+.status,
+.notice {
+    margin-block: auto;
+}
+
+.status {
+    margin-inline: 0;
+    color: var(--color-ink);
+    font-family: var(--font-main);
+    text-align: center;
+}
+
+.notice {
+    width: min(100%, 36rem);
+    @include mix.ink-border;
+    border-radius: 0.65rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-main);
+
+    p {
+        margin: 0;
+    }
+
+    &.is-error {
+        background: #fff1ee;
+    }
+}
+
+.cluster {
+    position: relative;
+    --circle-size: min(
+        var(--circle-max),
+        calc((100cqw - var(--page-pad-inline) * 2 - 2px) / var(--span-x, 1)),
+        max(
+            var(--circle-min),
+            calc(
+                (100cqh - (var(--page-pad-block) + var(--toolbar-space)) * 2 - 2px) /
+                    var(--span-y, 1)
+            )
+        )
+    );
+    flex: 0 0 auto;
+    width: calc(var(--span-x, 1) * var(--circle-size));
+    height: calc(var(--span-y, 1) * var(--circle-size));
+    max-width: 100%;
+
+    &.is-gathering,
+    &.is-spreading {
+        pointer-events: none;
+    }
+}
+
+@include bp.below(bp.$phone-wide) {
+    :host {
+        --circle-max: 6.25rem;
+        --circle-min: 3.5rem;
+        --page-pad-block: 1rem;
+        --page-pad-inline: 0.75rem;
+        --toolbar-space: 4rem;
+    }
+}

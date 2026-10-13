@@ -1,0 +1,21 @@
+<div class="corner-actions">
+    <button
+        type="button"
+        class="fab fab-small fab-reorder"
+        [class.is-spinning]="shuffling()"
+        aria-label="reordenar jogos"
+        title="reordenar jogos"
+        (click)="reorder.emit()"
+    >
+        <i class="pi pi-sync" aria-hidden="true"></i>
+    </button>
+    <button
+        type="button"
+        class="fab fab-add"
+        aria-label="adicionar novo jogo"
+        title="adicionar novo jogo"
+        (click)="add.emit()"
+    >
+        <span aria-hidden="true">+</span>
+    </button>
+</div>

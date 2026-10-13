@@ -1,138 +1,64 @@
 <h1 class="sr-only">{{ title }}</h1>
 
-<div class="toolbar">
-  <div class="levels">
-    <span id="levels-label" class="levels-label">nosso nível</span>
-    <div class="pill" role="group" aria-labelledby="levels-label">
-      @for (level of levels; track level) {
-        <button
-          type="button"
-          class="pill-part"
-          [class.is-selected]="levelSelected(level)"
-          [attr.aria-pressed]="levelSelected(level)"
-          (click)="toggleLevel(level)"
-        >
-          {{ level }}
-        </button>
-      }
-    </div>
-  </div>
-</div>
+<app-home-level-filter
+    [levels]="levels"
+    [selectedLevels]="selectedLevels()"
+    [refreshing]="refreshing()"
+    [loading]="loading()"
+    (levelToggled)="toggleLevel($event)"
+    (reloadCollection)="reload()"
+/>
 
 <div class="stage">
-  @if (loading()) {
-    <p class="status" role="status">carregando jogos</p>
-  } @else if (failed()) {
-    <div class="notice is-error" role="alert">
-      <p>não foi possível carregar os jogos.</p>
-    </div>
-  } @else if (collectionEmpty()) {
-    <div class="cluster" [style.--span-x]="circles().spanX" [style.--span-y]="circles().spanY">
-      <button
-        type="button"
-        class="circle circle-add"
-        aria-label="adicionar novo jogo"
-        title="adicionar novo jogo"
-        (click)="openCreate()"
-      >
-        <span aria-hidden="true">+</span>
-      </button>
-    </div>
-  } @else if (circles().items.length === 0) {
-    <p class="status" role="status">nenhum jogo nesse nível</p>
-  } @else {
-    <div
-      class="cluster"
-      [class.is-gathering]="shuffle() === 'gathering'"
-      [class.is-spreading]="shuffle() === 'spreading'"
-      [attr.aria-busy]="shuffle() !== 'idle'"
-      [style.--span-x]="circles().spanX"
-      [style.--span-y]="circles().spanY"
-    >
-      @for (item of circles().items; track item.index) {
-        <button
-          type="button"
-          class="circle"
-          [attr.aria-label]="item.name"
-          [class.is-center]="item.x === '0.0000' && item.y === '0.0000'"
-          [style.--x]="item.x"
-          [style.--y]="item.y"
-          [style.--pile-x]="item.pileX"
-          [style.--pile-y]="item.pileY"
-          [style.--spin]="item.spin"
-          [style.--delay]="item.delay"
-          (click)="openEdit(item.id)"
+    @if (loading()) {
+        <p class="status" role="status">carregando jogos</p>
+    } @else if (failed()) {
+        <div class="notice is-error" role="alert">
+            <p>não foi possível carregar os jogos.</p>
+        </div>
+    } @else if (collectionEmpty()) {
+        <div class="cluster" [style.--span-x]="circles().spanX" [style.--span-y]="circles().spanY">
+            <app-home-game-circle kind="add" (addGame)="openCreate()" />
+        </div>
+    } @else if (circles().items.length === 0) {
+        <p class="status" role="status">nenhum jogo nesse nível</p>
+    } @else {
+        <div
+            class="cluster"
+            [class.is-gathering]="shuffle() === 'gathering'"
+            [class.is-spreading]="shuffle() === 'spreading'"
+            [attr.aria-busy]="shuffle() !== 'idle'"
+            [style.--span-x]="circles().spanX"
+            [style.--span-y]="circles().spanY"
         >
-          @if (item.imageUrl !== null && !coverFailed(item.index)) {
-            <img [src]="item.imageUrl" alt="" (error)="markBroken(item.index)" />
-          } @else {
-            <span class="initial" aria-hidden="true">{{ item.initial }}</span>
-          }
-          <span class="veil">
-            <span class="name">{{ item.name }}</span>
-            <span class="date">{{ item.purchased }}</span>
-          </span>
-        </button>
-      }
-    </div>
-  }
+            @for (item of circles().items; track item.index; let odd = $odd) {
+                <app-home-game-circle
+                    [item]="item"
+                    [broken]="coverFailed(item.index)"
+                    [reverseSpin]="odd"
+                    (openGame)="openEdit($event)"
+                    (coverError)="markBroken($event)"
+                />
+            }
+        </div>
+    }
 </div>
 
 @if (hasGames()) {
-  <div class="corner-actions">
-    <button
-      type="button"
-      class="fab fab-small fab-reorder"
-      [class.is-spinning]="shuffle() !== 'idle'"
-      aria-label="reordenar jogos"
-      title="reordenar jogos"
-      (click)="reorder()"
-    >
-      <i class="pi pi-sync" aria-hidden="true"></i>
-    </button>
-    <button
-      type="button"
-      class="fab fab-add"
-      aria-label="adicionar novo jogo"
-      title="adicionar novo jogo"
-      (click)="openCreate()"
-    >
-      <span aria-hidden="true">+</span>
-    </button>
-  </div>
+    <app-home-corner-actions
+        [shuffling]="shuffle() !== 'idle'"
+        (reorder)="reorder()"
+        (add)="openCreate()"
+    />
 }
 
 <p-toast position="top-right" mode="expanded" [life]="4500" />
 
 @if (editor(); as editor) {
-  <p-dialog
-    [header]="editor.kind === 'edit' ? 'editar jogo' : 'adicionar novo jogo'"
-    [visible]="true"
-    (visibleChange)="onEditorVisible($event)"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
-    [closable]="true"
-    closeAriaLabel="fechar"
-    appendTo="body"
-    styleClass="account-dialog game-dialog"
-    maskStyleClass="account-dialog-mask"
-  >
-    @if (editor.kind === 'create') {
-      <app-game-form [saving]="saving()" (saveGame)="save($event)" />
-    } @else if (editor.phase === 'loading') {
-      <p class="status" role="status">carregando jogo</p>
-    } @else if (editor.phase === 'error') {
-      <div class="notice is-error" role="alert">
-        <p>{{ editor.message }}</p>
-      </div>
-    } @else {
-      <app-game-form
-        mode="edit"
+    <app-home-game-dialog
+        [editor]="editor"
         [saving]="saving()"
-        [sourceGame]="editor.game"
+        (visibleChange)="onEditorVisible($event)"
         (saveGame)="save($event)"
-      />
-    }
-  </p-dialog>
+    />
 }

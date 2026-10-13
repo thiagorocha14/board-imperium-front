@@ -6,11 +6,10 @@ const APP_NAME = 'nossos jogos';
 
 @Injectable()
 export class AppTitleStrategy extends TitleStrategy {
-  private readonly documentTitle = inject(Title);
+    private readonly documentTitle = inject(Title);
 
-  override updateTitle(snapshot: RouterStateSnapshot): void {
-    const screenTitle = this.buildTitle(snapshot);
-    const nextTitle = screenTitle ? `${APP_NAME}` : APP_NAME;
-    this.documentTitle.setTitle(nextTitle);
-  }
+    override updateTitle(snapshot: RouterStateSnapshot): void {
+        this.buildTitle(snapshot);
+        this.documentTitle.setTitle(APP_NAME);
+    }
 }
